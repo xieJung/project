@@ -1,0 +1,16 @@
+{
+  "id": "2197263",
+  "name": "后台项目第四阶段",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1418231",
+      "name": "头像",
+      "font_class": "touxiang",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    }
+  ]
+}
