@@ -1,8 +1,7 @@
 <template>
   <div>
     <!-- 添加按钮 -->
-    <el-button type="primary" class="button-add" @click="willAdd"
-      >添加</el-button>
+    <el-button type="primary" class="button-add" @click="willAdd">添加</el-button>
 
       <!-- 接收list子组件传来方法 @edit -->
     <v-list @edit ='edit($event)'></v-list>

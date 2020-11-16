@@ -1,27 +1,48 @@
 <template>
   <div class="centre">
+     <div class="cenbox">
+        <img src="../../assets/img/logo.png" alt=""><span>VUE后台登录</span>
+      </div>
     <div class="box">
-        <h2>登录</h2>
+      <h2>用户登录</h2>
         <div>
-          <input type="text" name="" id="" placeholder="请输入账户">
+          <input type="text" name="" id="" placeholder="请输入账户" v-model='user.username'>
         </div>
          <div>
-          <input type="password" name="" id="" placeholder="请输入密码">
+          <input type="password" name="" id="" placeholder="请输入密码" v-model='user.password'>
         </div>
         <div>
-          <button @click="$router.push('/index')">登录</button>
+          <button @click="register">登录</button>
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import {reqUserLogin} from '../../util/request'
+import {mapActions,mapGetters}  from 'vuex'
 export default {
     comments:{},
     data(){
-      return {}
+      return {
+         user:{
+        username:'',
+        password:'',
+      }
+      }
     },
-    methods:{},
+    methods:{
+      ...mapActions({
+      requsetUserLogin:'user/requsetUserLogin',
+    }),
+    // 登录
+    register(){
+          reqUserLogin(this.user).then(res=>{
+              this.requsetUserLogin(res.data.list)
+              this.$router.push('/index')
+          })
+    }
+    },
     mounted(){}
 }
 </script>
@@ -87,4 +108,26 @@ export default {
 .centre h2{
   margin-top: 30px;
 }
+.cenbox{
+    z-index: 2;
+    position: absolute;
+    left: 10px;
+    display: flex;
+    border-radius: 50%;
+    margin: 10px;
+    align-items: center;
+   
+}
+.cenbox img{
+  width: 30px;
+  height: 30px;
+}
+.cenbox span{
+    font-family: emoji;
+    letter-spacing: 5px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
 </style>

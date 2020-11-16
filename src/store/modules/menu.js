@@ -19,7 +19,6 @@ const actions={
         reqMenuList({istree:true}).then(res=>{
             context.commit('changeList',res.data.list)
         })
-      
     }
 }
 // 导出数据

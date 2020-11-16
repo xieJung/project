@@ -6,7 +6,7 @@
           <i class="el-icon-s-operation">伸缩</i>
         </div>
         <el-menu
-          default-active="1-4-1"
+          default-active="/index/home"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           router
@@ -14,41 +14,43 @@
           unique-opened
           text-color="#fff"
           background-color="#303133"
-          @close="handleClose"
-        >
+          @close="handleClose">
           <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
             <el-radio-button :label="false">展开</el-radio-button>
             <el-radio-button :label="true">收起</el-radio-button>
           </el-radio-group> -->
 
-          <el-menu-item index="/index">
+          <el-menu-item index="/index/home">
             <i class="el-icon-menu"></i>
             <span slot="title">首页</span>
           </el-menu-item>
 
-          <el-submenu index="1">
+      <div v-for='item in list.menus' :key='item.id'>
+          <el-submenu :index="'/index'+item.url" v-if="item.children">
             <template slot="title">
-              <i class="el-icon-location"></i>
-              <span slot="title">系统设置</span>
+              <i class="el-icon-s-custom"></i>
+              <span>{{item.title}}</span>
             </template>
-
-            <el-menu-item index="/index/menu">
+            <el-menu-item-group>
+              <el-menu-item :index="'/index'+i.url" v-for='i in item.children' :key='i.id'>{{i.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item  v-else  :index="item.url">{{item.title}}</el-menu-item>
+      </div>
+            <!-- <el-menu-item index="/index/menu">
               <i class="el-icon-s-fold"></i>
               <span>菜单管理</span>
-            </el-menu-item>
-
-            <el-menu-item index="/index/role">
+            </el-menu-item> -->
+            <!-- <el-menu-item index="/index/role">
               <i class="el-icon-user-solid"></i>
               <span>角色管理</span>
             </el-menu-item>
-
             <el-menu-item index="/index/manger">
               <i class="el-icon-s-custom"></i>
               <span>管理员管理</span>
             </el-menu-item>
-          </el-submenu>
-
-          <el-submenu index="3">
+          </el-submenu> -->
+          <!-- <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-s-goods"></i>
               <span>商城管理</span>
@@ -79,11 +81,15 @@
                 <span>秒杀商品</span>
               </el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
-        </el-menu></el-aside
-      >
+          </el-submenu> -->
+           </el-menu>
+        </el-aside>
       <el-container>
         <el-header>
+           <div class="topBox">
+            <div class="boxLeft"><span class="boxLefttext">{{list.username}}</span></div>
+            <div  class="boxLeft"><el-button type="primary" @click="quit" id="boxLeftbutton">退出</el-button></div>
+          </div>
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -92,7 +98,7 @@
             :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <i v-else class="iconfont iconfont-ico">&#xe60f;</i>
+            <!-- <i v-else class="iconfont iconfont-ico">&#xe60f;</i> -->
           </el-upload>
         </el-header>
         <el-main>
@@ -114,8 +120,14 @@
 </template>
 
 <script>
+import {mapGetters,mapActions} from 'vuex'
 export default {
-  comments: {},
+  computed: {
+    ...mapGetters({
+      list:'user/list'
+    })
+  },
+  components: {},
   data() {
     return {
       isCollapse: false,
@@ -123,6 +135,18 @@ export default {
     };
   },
   methods: {
+// 接收获取的值
+    ...mapActions({
+      requsetUserLogin:'user/requsetUserLogin'
+    }),
+    // 退出操作
+    quit(){
+      // 这是情况sessionStorage
+      this.requsetUserLogin({})
+      this.$router.push('/register')
+    },
+
+
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -134,7 +158,6 @@ export default {
     },
 
     // 头像方法
-
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
@@ -151,7 +174,9 @@ export default {
       return isJPG && isLt2M;
     },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.list)
+  },
 };
 </script>
 
@@ -167,6 +192,7 @@ export default {
 }
 .el-menu {
   border-right: none;
+  
 }
 .toggle-button {
   background: #666;
@@ -207,9 +233,13 @@ export default {
   color: #333;
   text-align: center;
   line-height: 20px;
-  height: 100vh;
+  height: auto;
 }
-
+#boxLeftbutton{
+  position: absolute;
+    right: 22px;
+    top: 9px;
+}
 
 /* 设置滚动条样式 */
 
@@ -234,6 +264,7 @@ export default {
 .el-main {
   background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
   line-height: 20px;
+  min-height: 90vh;
 }
 .el-menu-item * {
   vertical-align: middle;
@@ -289,4 +320,10 @@ export default {
 .iconfont-ico{
   color: white;
 }
+.boxLefttext{
+  color: white;
+  right: 110px;
+  position: absolute;
+}
+
 </style>
