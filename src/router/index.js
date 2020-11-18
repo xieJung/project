@@ -164,7 +164,7 @@ const router= new Router({
 router.beforeEach((to,from,next)=>{
     console.log(store); 
     // 直接去登录的
-    if(to.path=='/register'){
+    if(to.path=='/register'||to.path==''){
         next()
         return
     }
